@@ -1,0 +1,71 @@
+**face_recognition_demo**
+
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name face-detection-retail-0004
+
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name landmarks-regression-retail-0009
+
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name  face-reidentification-retail-0095
+
+python “c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\face_recognition_demo\face_recognition_demo.py” -m_fd c:\Users\Public\openvino_models\intel\face-detection-retail-0004\FP16\face-detection-retail-0004.xml -m_lm c:\Users\Public\openvino_models\intel\landmarks-regression-retail-0009\FP16\landmarks-regression-retail-0009.xml -m_reid c:\Users\Public\openvino_models\intel\face-reidentification-retail-0095\FP16\face-reidentification-retail-0095.xml –l C:\Users\changjoh\Documents\Intel\OpenVINO\omz_demos_build\intel64\Release\cpu_extension.dll -fg c:\Users\Public\face_gallery -i 0
+
+============================================================
+**Multi-Device inference python sample**
+
+import cv2
+import numpy as np
+from openvino.inference_engine import IENetwork, IECore
+ie = IECore()
+ie.add_extension('cpu_extension_avx2.dll', 'CPU')
+net = IENetwork(model=‘resnet-50-pytorch.xml', weights=' resnet-50-pytorch.bin')
+input_blob = next(iter(net.inputs))
+out_blob = next(iter(net.outputs))
+batch,channel,height,width  = net.inputs[input_blob].shape
+image = cv2.imread(‘car.png')
+cv2.imshow("input", image)
+image = cv2.resize(image, (width, height))
+image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
+exec_net = ie.load_network(network=net, device_name=‘MULTI:GPU,CPU')
+res = exec_net.infer(inputs={input_blob: image})
+idx = np.argsort(res[out_blob][0])[::-1]
+for i in range(5):
+    print(idx[i]+1, res[out_blob][0][idx[i]])
+
+cv2.waitKey(3*1000)
+
+============================================================
+**object_detection_demo_ssd_async**
+
+python C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name ssd300
+
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" -d "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name  ssd300
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\object_detection_demo_ssd_async\object_detection_demo_ssd_async.py" -l C:\Users\changjoh\Documents\Intel\OpenVINO\omz_demos_build\intel64\Release\cpu_extension.dll -m C:\Users\Public\openvino_models\public\ssd300\FP16\ssd300.xml -i cam
+
+============================================================
+**hello_query_device**
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\samples\python\hello_query_device\hello_query_device.py"
+
+============================================================
+**HDDL inference python sample**
+
+import cv2
+import numpy as np
+from openvino.inference_engine import IENetwork, IECore
+ie = IECore()
+ie.add_extension('cpu_extension_avx2.dll', 'CPU')
+net = IENetwork(model=‘resnet-50-pytorch.xml', weights=' resnet-50-pytorch.bin')
+input_blob = next(iter(net.inputs))
+out_blob = next(iter(net.outputs))
+batch,channel,height,width  = net.inputs[input_blob].shape
+image = cv2.imread(‘car.png')
+cv2.imshow("input", image)
+image = cv2.resize(image, (width, height))
+image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
+exec_net = ie.load_network(network=net, device_name=‘HDDL')
+res = exec_net.infer(inputs={input_blob: image})
+idx = np.argsort(res[out_blob][0])[::-1]
+for i in range(5):
+    print(idx[i]+1, res[out_blob][0][idx[i]])
+
+cv2.waitKey(3*1000)
