@@ -1,0 +1,32 @@
+#
+# Classification
+#
+
+cd c:\Users\Public
+
+### Download the model
+
+https://storage.googleapis.com/download.tensorflow.org/models/inception_v3_2016_08_28_frozen.pb.tar.gz
+
+### Run MO
+
+python "c:\Program Files (x86)\IntelSWTools\openvino_2019.3.379\deployment_tools\model_optimizer\mo.py" --input_model inception_v3_2016_08_28_frozen.pb --input_shape [1,299,299,3] --mean_values=input[127.5,127.5,127.5] --scale_values=input[127.50000414375013]  --reverse_input_channels --input input --output=InceptionV3/Predictions/Softmax
+
+
+#
+# Object Detection
+#
+
+cd c:\Users\Public
+
+### Download the model
+
+http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz
+
+### Run MO
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\model_optimizer"\mo.py  --input_model ssd_inception_v2_coco_2018_01_28\frozen_inference_graph.pb --tensorflow_use_custom_operations_config "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\model_optimizer\extensions\front\tf\ssd_v2_support.json“  --tensorflow_object_detection_api_pipeline_config ssd_inception_v2_coco_2018_01_28\pipeline.config  --reverse_input_channels
+
+
+
+
