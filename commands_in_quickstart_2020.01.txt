@@ -137,7 +137,7 @@ python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\mode
 python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name single-human-pose-estimation-0001 -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
 python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name mobilenet-ssd --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
 python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name mobilenet-ssd -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
-cd "c:\Program Files (x86)\IntelSWTools\openvino\ deployment_tools\inference_engine\demos\python_demos\single_human_pose_estimation_demo
+cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engine\demos\python_demos\single_human_pose_estimation_demo
 python single_human_pose_estimation_demo.py -m_od "C:\Users\Public\openvino_models\public\mobilenet-ssd\FP16\mobilenet-ssd.xml" -m_hpe  "C:\Users\Public\openvino_models\public\single-human-pose-estimation-0001\FP16\single-human-pose-estimation-0001.xml" -i 0
 
 
