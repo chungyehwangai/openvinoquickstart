@@ -141,6 +141,16 @@ cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engi
 python single_human_pose_estimation_demo.py -m_od "C:\Users\Public\openvino_models\public\mobilenet-ssd\FP16\mobilenet-ssd.xml" -m_hpe  "C:\Users\Public\openvino_models\public\single-human-pose-estimation-0001\FP16\single-human-pose-estimation-0001.xml" -i 0
 
 
+[Face Recognition Demo with webcam on different device]
+"c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
+mkdir c:\Users\Public\face_gallery
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name face-detection-retail-0004
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name landmarks-regression-retail-0009
+python "C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models" --name  face-reidentification-retail-0095
+python “c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\face_recognition_demo\face_recognition_demo.py” -m_fd c:\Users\Public\openvino_models\intel\face-detection-retail-0004\FP16\face-detection-retail-0004.xml -m_lm c:\Users\Public\openvino_models\intel\landmarks-regression-retail-0009\FP16\landmarks-regression-retail-0009.xml -m_reid c:\Users\Public\openvino_models\intel\face-reidentification-retail-0095\FP16\face-reidentification-retail-0095.xml –d_fd CPU –d_lm GPU –d_reid GPU -fg c:\Users\Public\face_gallery -i 0
+
+
+
 [build C++ sample and demo code]
 "C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\deployment_tools\inference_engine\samples\cpp\build_samples_msvc.bat" VS2019
 
