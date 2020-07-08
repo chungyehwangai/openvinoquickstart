@@ -103,6 +103,14 @@ for i in range(5):
 
 cv2.waitKey(3*1000)
 
+[benchmark_app.py]
+"c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat "
+cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool"
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d CPU
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d GPU
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d MYRIAD
 
 [??webcam??????Demo]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
@@ -148,11 +156,4 @@ human_pose_estimation_demo.exe -m "C:\Users\Public\openvino_models\intel\human-p
 interactive_face_detection_demo.exe -m C:\Users\Public\openvino_models\intel\face-detection-retail-0004\FP16\face-detection-retail-0004.xml -m_ag C:\Users\Public\openvino_models\intel\age-gender-recognition-retail-0013\FP16\age-gender-recognition-retail-0013.xml -m_em C:\Users\Public\openvino_models\intel\emotions-recognition-retail-0003\FP16\emotions-recognition-retail-0003.xml -m_lm C:\Users\Public\openvino_models\intel\facial-landmarks-35-adas-0002\FP16\facial-landmarks-35-adas-0002.xml -m_hp C:\Users\Public\openvino_models\intel\head-pose-estimation-adas-0001\FP16\head-pose-estimation-adas-0001.xml -i cam
 
 
-[??benchmark_app.py??????]
-"c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat "
-cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool"
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d CPU
 
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py"  -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d GPU
-
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py"  -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d MYRIAD
