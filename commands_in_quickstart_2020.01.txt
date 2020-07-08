@@ -53,7 +53,7 @@ image = cv2.imread('car.png')
 cv2.imshow("input", image)
 image = cv2.resize(image, (width, height))
 image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
-exec_net = ie.load_network(network=net, device_name='CPU')
+exec_net = ie.load_network(network=net, device_name='GPU')
 res = exec_net.infer(inputs={input_blob: image})
 idx = np.argsort(res[out_blob][0])[::-1]
 for i in range(5):
@@ -74,7 +74,7 @@ image = cv2.imread('car.png')
 cv2.imshow("input", image)
 image = cv2.resize(image, (width, height))
 image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
-exec_net = ie.load_network(network=net, device_name='CPU')
+exec_net = ie.load_network(network=net, device_name='MYRIAD')
 res = exec_net.infer(inputs={input_blob: image})
 idx = np.argsort(res[out_blob][0])[::-1]
 for i in range(5):
@@ -82,56 +82,83 @@ for i in range(5):
 
 cv2.waitKey(3*1000)
 
+[Infer on Multi-device (CPU and GPU)]
+import cv2
+import numpy as np
+from openvino.inference_engine import IENetwork, IECore
+ie = IECore()
+net = IENetwork(model='mobilenet-v2-1.0-224.xml', weights='mobilenet-v2-1.0-224.bin')
+input_blob = next(iter(net.inputs))
+out_blob = next(iter(net.outputs))
+batch,channel,height,width  = net.inputs[input_blob].shape
+image = cv2.imread('car.png')
+cv2.imshow("input", image)
+image = cv2.resize(image, (width, height))
+image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
+exec_net = ie.load_network(network=net, device_name='MULTI:GPU,CPU')
+res = exec_net.infer(inputs={input_blob: image})
+idx = np.argsort(res[out_blob][0])[::-1]
+for i in range(5):
+    print(idx[i]+1, res[out_blob][0][idx[i]])
 
-[??webcam??????Demo]
+cv2.waitKey(3*1000)
+
+[benchmark_app.py]
+"c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat "
+cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool"
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d CPU
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d GPU
+
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d MYRIAD
+
+[Object Detection Demo with webcam]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\ deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\ deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+
+(for quick start)
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name person-detection-retail-0013,face-detection-adas-0001 --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+
 cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async"
 python object_detection_demo_ssd_async.py -m "C:\Users\Public\openvino_models\intel\person-detection-retail-0013\FP16\person-detection-retail-0013.xml" -i cam
 python object_detection_demo_ssd_async.py -m "C:\Users\Public\openvino_models\intel\face-detection-adas-0001\FP16\face-detection-adas-0001.xml" -i cam
 
 
-[??webcam???????? Demo]
+[Instance Segmentation Demo with webcam]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\instance_segmentation_demo\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\instance_segmentation_demo\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
 cd "c:\Program Files (x86)\IntelSWTools\openvino\inference_engine\demos\python_demos\instance_segmentation_demo"
 python instance_segmentation_demo.py -m "C:\Users\Public\openvino_models\intel\instance-segmentation-security-0050\FP16\instance-segmentation-security-0050.xml" --labels coco_labels.txt -i 0
 
 
-[??webcam??Interactive Face Detection Demo]
+[Single Human Pose Estimation Demo with webcam]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name single-human-pose-estimation-0001 --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models 
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name single-human-pose-estimation-0001 -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name mobilenet-ssd --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name mobilenet-ssd -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name single-human-pose-estimation-0001 --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models 
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name single-human-pose-estimation-0001 -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name mobilenet-ssd --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\converter.py" --name mobilenet-ssd -d C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
 cd "c:\Program Files (x86)\IntelSWTools\openvino\ deployment_tools\inference_engine\demos\python_demos\single_human_pose_estimation_demo
 python single_human_pose_estimation_demo.py -m_od "C:\Users\Public\openvino_models\public\mobilenet-ssd\FP16\mobilenet-ssd.xml" -m_hpe  "C:\Users\Public\openvino_models\public\single-human-pose-estimation-0001\FP16\single-human-pose-estimation-0001.xml" -i 0
 
 
-[??C++ sample and demo code]
+[build C++ sample and demo code]
 "C:\Program Files (x86)\IntelSWTools\openvino_2020.1.033\deployment_tools\inference_engine\samples\cpp\build_samples_msvc.bat" VS2019
 
 "C:\Program Files (x86)\IntelSWTools\openvino_2020.1.033\deployment_tools\open_model_zoo\demos\build_demos_msvc.bat" VS2019
 
 Following example requires visual studio 2017/2019 installed and use command prompt to run "build_demos_msvc.bat VS2019" in folder C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engine\demos
 
-[human pose]
+
+[C++ sample - Human Pose]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\open_model_zoo\demos\human_pose_estimation_demo\models.lst" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models"
+python  "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\open_model_zoo\demos\human_pose_estimation_demo\models.lst" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models"
 human_pose_estimation_demo.exe -m "C:\Users\Public\openvino_models\intel\human-pose-estimation-0001\FP16\human-pose-estimation-0001.xml"
 
 
-[interactive face detection]
+[C++ sample - Interactive Face Detection]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\open_model_zoo\demos\interactive_face_detection_demo\models.lst" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models"
+python  "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\open_model_zoo\demos\interactive_face_detection_demo\models.lst" --cache_dir "C:\Users\Public\openvino_models" -o "C:\Users\Public\openvino_models"
 interactive_face_detection_demo.exe -m C:\Users\Public\openvino_models\intel\face-detection-retail-0004\FP16\face-detection-retail-0004.xml -m_ag C:\Users\Public\openvino_models\intel\age-gender-recognition-retail-0013\FP16\age-gender-recognition-retail-0013.xml -m_em C:\Users\Public\openvino_models\intel\emotions-recognition-retail-0003\FP16\emotions-recognition-retail-0003.xml -m_lm C:\Users\Public\openvino_models\intel\facial-landmarks-35-adas-0002\FP16\facial-landmarks-35-adas-0002.xml -m_hp C:\Users\Public\openvino_models\intel\head-pose-estimation-adas-0001\FP16\head-pose-estimation-adas-0001.xml -i cam
 
 
-[??benchmark_app.py??????]
-"c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat "
-cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool"
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d CPU
 
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py"  -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d GPU
-
-python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py"  -m  "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d MYRIAD
