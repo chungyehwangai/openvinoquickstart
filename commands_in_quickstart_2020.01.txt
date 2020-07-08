@@ -112,9 +112,13 @@ python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benc
 
 python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\benchmark_tool\benchmark_app.py" -m "C:\Users\Public\openvino_models\public\mobilenet-ssd/FP16/mobilenet-ssd.xml" -d MYRIAD
 
-[??webcam??????Demo]
+[Object Detection Demo with webcam]
 "c:\Program Files (x86)\IntelSWTools\openvino\bin\setupvars.bat"
-"c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\ deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --list "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\ deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async\models.lst" --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+
+(for quick start)
+python "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\tools\model_downloader\downloader.py" --name person-detection-retail-0013,face-detection-adas-0001 --cache_dir C:\Users\Public\openvino_models -o C:\Users\Public\openvino_models
+
 cd "c:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engine\demos\python_demos\object_detection_demo_ssd_async"
 python object_detection_demo_ssd_async.py -m "C:\Users\Public\openvino_models\intel\person-detection-retail-0013\FP16\person-detection-retail-0013.xml" -i cam
 python object_detection_demo_ssd_async.py -m "C:\Users\Public\openvino_models\intel\face-detection-adas-0001\FP16\face-detection-adas-0001.xml" -i cam
