@@ -142,9 +142,9 @@ python single_human_pose_estimation_demo.py -m_od "C:\Users\Public\openvino_mode
 
 
 [build C++ sample and demo code]
-"C:\Program Files (x86)\IntelSWTools\openvino_2020.1.033\deployment_tools\inference_engine\samples\cpp\build_samples_msvc.bat" VS2019
+"C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\deployment_tools\inference_engine\samples\cpp\build_samples_msvc.bat" VS2019
 
-"C:\Program Files (x86)\IntelSWTools\openvino_2020.1.033\deployment_tools\open_model_zoo\demos\build_demos_msvc.bat" VS2019
+"C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\deployment_tools\open_model_zoo\demos\build_demos_msvc.bat" VS2019
 
 Following example requires visual studio 2017/2019 installed and use command prompt to run "build_demos_msvc.bat VS2019" in folder C:\Program Files (x86)\IntelSWTools\openvino\deployment_tools\inference_engine\demos
 
